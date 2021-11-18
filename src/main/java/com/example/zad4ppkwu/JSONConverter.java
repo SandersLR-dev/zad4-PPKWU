@@ -57,6 +57,19 @@ public class JSONConverter {
         return xml;
     }
 
+    public String toCSV(String JSON){
+
+        String modifiedResponse = "{\"infile\": [" + JSON + "]}";
+
+        JSONObject jsonObject = new JSONObject(modifiedResponse);
+
+        JSONArray jsonArray = jsonObject.getJSONArray("infile");
+
+        String csv = CDL.toString(jsonArray);
+
+        return csv;
+    }
+
 
 
 
