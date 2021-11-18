@@ -151,6 +151,54 @@ public class FormatController {
         return "";
     }
 
+    @GetMapping(value = "/XML/{from}/{text}", produces = {"application/xml", "text/xml"})
+    public String xmlConverter(@PathVariable String from, @PathVariable String text) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        if (from.equals("JSON")) {
+
+            String json = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            JSONObject jsonObject = new JSONObject(json);
+
+            String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<" + "root" + ">" + XML.toString(jsonObject) + "</" + "root" + ">";
+
+            return xml;
+
+        } else if (from.equals("CSV")) {
+
+            String csv = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            String[] sp = csv.split("\n");
+
+            String[] key = sp[0].split(",");
+            String[] value = sp[1].split(",");
+
+            String json = "{";
+            for (int i = 0; i < key.length; i++) {
+                if (i != 0) {
+                    json += ",";
+                }
+                json += "\"" + key[i] + "\":\"" + value[i] + "\"";
+            }
+            json += "}";
+
+            JSONConverter converter = new JSONConverter();
+
+            return converter.toXML(json);
+        } else if (from.equals("XML")) {
+
+            return restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+        } else if (from.equals("TXT")) {
+            String txt = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            JSONConverter converter = new JSONConverter();
+
+            return converter.toXML(converter.toJSONTXT(txt));
+
+        }
+        return "";
+    }
 
 
 }
