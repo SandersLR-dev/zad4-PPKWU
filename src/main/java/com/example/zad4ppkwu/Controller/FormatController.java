@@ -64,6 +64,56 @@ public class FormatController {
         }
     }
 
+    @GetMapping("/JSON/{from}/{text}")
+    public Map jsonConverter(@PathVariable String from, @PathVariable String text) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        if (from.equals("JSON")) {
+
+            Map json = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, Map.class);
+
+            return json;
+
+        } else if (from.equals("CSV")) {
+
+            String csv = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            String[] sp = csv.split("\n");
+
+            String[] key = sp[0].split(",");
+            String[] value = sp[1].split(",");
+
+            String json = "{";
+            for (int i = 0; i < key.length; i++) {
+                if (i != 0) {
+                    json += ",";
+                }
+                json += "\"" + key[i] + "\":\"" + value[i] + "\"";
+            }
+            json += "}";
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(json, Map.class);
+
+        } else if (from.equals("XML")) {
+
+            String xml = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+            JSONObject xmlJSONObj = XML.toJSONObject(xml);
+            String json = xmlJSONObj.get("root").toString();
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(json, Map.class);
+
+        } else if (from.equals("TXT")) {
+            String txt = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            JSONConverter converter = new JSONConverter();
+
+            return converter.toJSON(txt);
+
+        }
+        return Map.of();
+    }
+
 
 
 }
