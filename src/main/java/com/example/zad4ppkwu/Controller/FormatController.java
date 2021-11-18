@@ -114,6 +114,43 @@ public class FormatController {
         return Map.of();
     }
 
+    @GetMapping(value = "/CSV/{from}/{text}", produces = {"text/plain"})
+    public String csvConverter(@PathVariable String from, @PathVariable String text) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        if (from.equals("JSON")) {
+
+            String json = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            JSONConverter converter = new JSONConverter();
+
+
+            return converter.toCSV(json);
+
+        } else if (from.equals("CSV")) {
+
+            return restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+        } else if (from.equals("XML")) {
+
+            String xml = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+            JSONObject xmlJSONObj = XML.toJSONObject(xml);
+            String json = xmlJSONObj.get("root").toString();
+
+            JSONConverter converter = new JSONConverter();
+
+            return converter.toCSV(json);
+
+        } else if (from.equals("TXT")) {
+            String txt = restTemplate.getForObject("http://localhost:8081/" + from + "/" + text, String.class);
+
+            JSONConverter converter = new JSONConverter();
+
+            return converter.toCSV(converter.toJSONTXT(txt));
+
+        }
+        return "";
+    }
+
 
 
 }
