@@ -32,6 +32,24 @@ public class JSONConverter {
         return txt;
     }
 
+    public String toTXT(Map JSON) throws JsonProcessingException {
+
+        String txtformat = "givenString: %s\nlenght: %d\nletter: %d\nlowerCase: %d\nupperCase: %d\nnumber: %d\nwhiteSpace: %d\nspecialChar: %d\n";
+
+        String txt = String.format(txtformat, JSON.get("givenString")
+                , JSON.get("length")
+                , JSON.get("letter")
+                , JSON.get("lowerCase")
+                , JSON.get("upperCase")
+                , JSON.get("number")
+                , JSON.get("whiteSpace")
+                , JSON.get("specialChar"));
+
+        return txt;
+    }
+
+
+
 
 
 
