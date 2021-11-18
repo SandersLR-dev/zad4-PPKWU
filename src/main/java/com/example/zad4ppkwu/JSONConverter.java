@@ -70,6 +70,61 @@ public class JSONConverter {
         return csv;
     }
 
+    public Map toJSON(String txt) throws JsonProcessingException {
+
+        String json="{";
+        String[] test = txt.split("\n");
+
+        for(int i=0;i<test.length;i++){
+            if(i!=0)
+            {
+                json+=",";
+            }
+            String[] poz = test[i].split(":");
+
+            json+="\""+poz[0]+"\":";
+
+            if(i==0)
+            {
+                json+="\""+poz[1].substring(1)+"\"";
+            }else{
+                json+=Integer.parseInt(String.valueOf(poz[1]).substring(1));
+            }
+
+        }
+        json+="}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, Map.class);
+    }
+
+
+    public String toJSONTXT(String txt) throws JsonProcessingException {
+
+        String json="{";
+        String[] test = txt.split("\n");
+
+        for(int i=0;i<test.length;i++){
+            if(i!=0)
+            {
+                json+=",";
+            }
+            String[] poz = test[i].split(":");
+
+            json+="\""+poz[0]+"\":";
+
+            if(i==0)
+            {
+                json+="\""+poz[1].substring(1)+"\"";
+            }else{
+                json+=Integer.parseInt(String.valueOf(poz[1]).substring(1));
+            }
+
+        }
+        json+="}";
+
+        return json;
+    }
 
 
 
