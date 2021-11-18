@@ -48,6 +48,15 @@ public class JSONConverter {
         return txt;
     }
 
+    public String toXML(String JSON) {
+
+        JSONObject jsonObject = new JSONObject(JSON);
+
+        String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<" + "root" + ">" + XML.toString(jsonObject) + "</" + "root" + ">";
+
+        return xml;
+    }
+
 
 
 
