@@ -11,6 +11,27 @@ import java.util.Map;
 
 public class JSONConverter {
 
+    public String toTXT(String JSON) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map json = mapper.readValue(JSON, Map.class);
+
+
+        String txtformat = "givenString: %s\nlenght: %d\nletter: %d\nlowerCase: %d\nupperCase: %d\nnumber: %d\nwhiteSpace: %d\nspecialChar: %d\n";
+
+        String txt = String.format(txtformat
+                , json.get("givenString")
+                , Integer.parseInt(String.valueOf(json.get("length")))
+                , Integer.parseInt(String.valueOf(json.get("letter")))
+                , Integer.parseInt(String.valueOf(json.get("lowerCase")))
+                , Integer.parseInt(String.valueOf(json.get("upperCase")))
+                , Integer.parseInt(String.valueOf(json.get("number")))
+                , Integer.parseInt(String.valueOf(json.get("whiteSpace")))
+                , Integer.parseInt(String.valueOf(json.get("specialChar"))));
+
+        return txt;
+    }
+
 
 
 
